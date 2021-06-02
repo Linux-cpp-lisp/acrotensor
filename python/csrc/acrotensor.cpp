@@ -105,12 +105,22 @@ class AcroEinsumFunction : public torch::autograd::Function<AcroEinsumFunction> 
         std::vector<int> cur_sizes;
         acro::Tensor cur_tensor;
         for (auto it = operands.begin(); it < operands.end(); it++, op_index++) {
-            // void Init(std::vector<int> &dims, double *hdata=nullptr, double *ddata=nullptr, bool ongpu=false);
+            // void Init(std::vector<int> &dims, float *hdata=nullptr, float *ddata=nullptr, bool ongpu=false);
             cur_sizes = std::vector<int>(it->sizes().begin(), it->sizes().end());
-            operands_acro[op_index] = acro::Tensor(
-                cur_sizes,
-                (*it).contiguous().data_ptr<double>()
-            );
+            if ((*it).device() == torch::kCUDA) {
+                operands_acro[op_index].Init(
+                    cur_sizes,
+                    nullptr, // hdata
+                    (*it).contiguous().data_ptr<float>(), // ddata
+                    true // ongpu
+                );
+            }
+            else {
+                operands_acro[op_index].Init(
+                    cur_sizes,
+                    (*it).contiguous().data_ptr<float>() // hdata
+                );
+            }
             operands_acro_ptr[op_index] = &operands_acro[op_index];
         }
 
@@ -122,12 +132,23 @@ class AcroEinsumFunction : public torch::autograd::Function<AcroEinsumFunction> 
             outshape_acro.push_back(outshape.back());
         }
 
-        auto options = torch::TensorOptions().dtype(torch::kFloat64);
+        auto options = torch::TensorOptions().device(op0.device());
         auto out = torch::empty(outshape, options);
-        acro::Tensor out_acro = acro::Tensor(
-            outshape_acro,
-            out.data_ptr<double>()
-        );
+        acro::Tensor out_acro;
+        if (op0.device() == torch::kCUDA) {
+            out_acro.Init(
+                outshape_acro,
+                nullptr, // hdata
+                out.data_ptr<float>(), // ddata
+                true
+            );
+        }
+        else {
+            out_acro.Init(
+                outshape_acro,
+                out.data_ptr<float>() // hdata
+            );
+        }
 
         // Run contraction
         std::string acrostr_final(acrostr.begin(), acrostr.end());

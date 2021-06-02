@@ -16,8 +16,8 @@ void CudaGPUOps::BatchMatrixInverse(Tensor &Ainv, Tensor &A)
     int mdim = A.GetDim(rank-1);
     int stride = mdim*mdim;
     int num_batch = A.GetSize() / stride;
-    double *A_ptr = A.GetDeviceData();
-    double *Ainv_ptr = Ainv.GetDeviceData();
+    float *A_ptr = A.GetDeviceData();
+    float *Ainv_ptr = Ainv.GetDeviceData();
     if (mdim == 1)
     {
         CudaInv1x1<<<num_batch/128+1,128>>>(Ainv_ptr, A_ptr, num_batch);
@@ -39,8 +39,8 @@ void CudaGPUOps::BatchMatrixDet(Tensor &Adet, Tensor &A)
     int mdim = A.GetDim(rank-1);
     int stride = mdim*mdim;
     int num_batch = A.GetSize() / stride;
-    double *A_ptr = A.GetDeviceData();
-    double *Adet_ptr = Adet.GetDeviceData();
+    float *A_ptr = A.GetDeviceData();
+    float *Adet_ptr = Adet.GetDeviceData();
     if (mdim == 1)
     {
         CudaDet1x1<<<num_batch/128+1,128>>>(Adet_ptr, A_ptr, num_batch);
@@ -62,9 +62,9 @@ void CudaGPUOps::BatchMatrixInvDet(Tensor &Ainv, Tensor &Adet, Tensor &A)
     int mdim = A.GetDim(rank-1);
     int stride = mdim*mdim;
     int num_batch = A.GetSize() / stride;
-    double *A_ptr = A.GetDeviceData();
-    double *Ainv_ptr = Ainv.GetDeviceData();    
-    double *Adet_ptr = Adet.GetDeviceData();
+    float *A_ptr = A.GetDeviceData();
+    float *Ainv_ptr = Ainv.GetDeviceData();    
+    float *Adet_ptr = Adet.GetDeviceData();
     if (mdim == 1)
     {
         CudaInvDet1x1<<<num_batch/128+1,128>>>(Ainv_ptr, Adet_ptr, A_ptr, num_batch);
@@ -82,8 +82,8 @@ void CudaGPUOps::BatchMatrixInvDet(Tensor &Ainv, Tensor &Adet, Tensor &A)
 
 void CudaGPUOps::FlatIndexedScatter(Tensor &Aout, Tensor &Ain, IndexMapping &M)
 {
-    double *Aout_ptr = Aout.GetDeviceData();
-    double *Ain_ptr = Ain.GetDeviceData();
+    float *Aout_ptr = Aout.GetDeviceData();
+    float *Ain_ptr = Ain.GetDeviceData();
     int *M_ptr = M.GetMap().GetDeviceData();
     int *InvM_ptr = M.GetInvMap().GetDeviceData();
     int *InvMOff_ptr = M.GetInvMapOffsets().GetDeviceData();
@@ -94,8 +94,8 @@ void CudaGPUOps::FlatIndexedScatter(Tensor &Aout, Tensor &Ain, IndexMapping &M)
 
 void CudaGPUOps::FlatIndexedSumGather(Tensor &Aout, Tensor &Ain, IndexMapping &M)
 {
-    double *Aout_ptr = Aout.GetDeviceData();
-    double *Ain_ptr = Ain.GetDeviceData();
+    float *Aout_ptr = Aout.GetDeviceData();
+    float *Ain_ptr = Ain.GetDeviceData();
     int *M_ptr = M.GetMap().GetDeviceData();
     int *InvM_ptr = M.GetInvMap().GetDeviceData();
     int *InvMOff_ptr = M.GetInvMapOffsets().GetDeviceData();
@@ -105,7 +105,7 @@ void CudaGPUOps::FlatIndexedSumGather(Tensor &Aout, Tensor &Ain, IndexMapping &M
 }
 
 
-__global__ void CudaInv1x1(double *Ainv, double *A, int N)
+__global__ void CudaInv1x1(float *Ainv, float *A, int N)
 {
     int idx = blockIdx.x*blockDim.x + threadIdx.x;
     if (idx < N)
@@ -115,17 +115,17 @@ __global__ void CudaInv1x1(double *Ainv, double *A, int N)
 }
 
 
-__global__ void CudaInv2x2(double *Ainv, double *A, int N)
+__global__ void CudaInv2x2(float *Ainv, float *A, int N)
 {
     int idx = blockIdx.x*blockDim.x + threadIdx.x;
     if (idx < N)
     {
         int b = idx*4;
-        double A0 = A[b];
-        double A1 = A[b+1];
-        double A2 = A[b+2];
-        double A3 = A[b+3];
-        double invdet = 1.0 / (A0*A3 - A1*A2);
+        float A0 = A[b];
+        float A1 = A[b+1];
+        float A2 = A[b+2];
+        float A3 = A[b+3];
+        float invdet = 1.0 / (A0*A3 - A1*A2);
         Ainv[b+0] = invdet*A3;
         Ainv[b+1] = -invdet*A1;
         Ainv[b+2] = -invdet*A2;
@@ -134,22 +134,22 @@ __global__ void CudaInv2x2(double *Ainv, double *A, int N)
 }
 
 
-__global__ void CudaInv3x3(double *Ainv, double *A, int N)
+__global__ void CudaInv3x3(float *Ainv, float *A, int N)
 {
     int idx = blockIdx.x*blockDim.x + threadIdx.x;
     if (idx < N)
     {
         int b = idx*9;
-        double A0 = A[b];
-        double A1 = A[b+1];
-        double A2 = A[b+2];
-        double A3 = A[b+3];
-        double A4 = A[b+4];
-        double A5 = A[b+5];
-        double A6 = A[b+6];
-        double A7 = A[b+7];
-        double A8 = A[b+8];
-        double invdet = 1.0 / (A0*A4*A8 + A1*A5*A6 + A2*A3*A7 
+        float A0 = A[b];
+        float A1 = A[b+1];
+        float A2 = A[b+2];
+        float A3 = A[b+3];
+        float A4 = A[b+4];
+        float A5 = A[b+5];
+        float A6 = A[b+6];
+        float A7 = A[b+7];
+        float A8 = A[b+8];
+        float invdet = 1.0 / (A0*A4*A8 + A1*A5*A6 + A2*A3*A7 
                              - A6*A4*A2 - A7*A5*A0 - A8*A3*A1);
         Ainv[b+0] = invdet*(A4*A8 - A5*A7);
         Ainv[b+1] = invdet*(A5*A6 - A3*A8);
@@ -164,7 +164,7 @@ __global__ void CudaInv3x3(double *Ainv, double *A, int N)
 }
 
 
-__global__ void CudaDet1x1(double *Adet, double *A, int N)
+__global__ void CudaDet1x1(float *Adet, float *A, int N)
 {
     int idx = blockIdx.x*blockDim.x + threadIdx.x;
     if (idx < N)
@@ -174,67 +174,67 @@ __global__ void CudaDet1x1(double *Adet, double *A, int N)
 }
 
 
-__global__ void CudaDet2x2(double *Adet, double *A, int N)
+__global__ void CudaDet2x2(float *Adet, float *A, int N)
 {
     int idx = blockIdx.x*blockDim.x + threadIdx.x;
     if (idx < N)
     {
         int b = idx*4;
-        double A0 = A[b];
-        double A1 = A[b+1];
-        double A2 = A[b+2];
-        double A3 = A[b+3];
+        float A0 = A[b];
+        float A1 = A[b+1];
+        float A2 = A[b+2];
+        float A3 = A[b+3];
         Adet[idx] = (A0*A3 - A1*A2);
     }
 }
 
 
-__global__ void CudaDet3x3(double *Adet, double *A, int N)
+__global__ void CudaDet3x3(float *Adet, float *A, int N)
 {
     int idx = blockIdx.x*blockDim.x + threadIdx.x;
     if (idx < N)
     {
         int b = idx*9;
-        double A0 = A[b];
-        double A1 = A[b+1];
-        double A2 = A[b+2];
-        double A3 = A[b+3];
-        double A4 = A[b+4];
-        double A5 = A[b+5];
-        double A6 = A[b+6];
-        double A7 = A[b+7];
-        double A8 = A[b+8];
+        float A0 = A[b];
+        float A1 = A[b+1];
+        float A2 = A[b+2];
+        float A3 = A[b+3];
+        float A4 = A[b+4];
+        float A5 = A[b+5];
+        float A6 = A[b+6];
+        float A7 = A[b+7];
+        float A8 = A[b+8];
         Adet[idx] = (A0*A4*A8 + A1*A5*A6 + A2*A3*A7 
                    - A6*A4*A2 - A7*A5*A0 - A8*A3*A1);       
     }
 }
 
 
-__global__ void CudaInvDet1x1(double *Ainv, double *Adet, double *A, int N)
+__global__ void CudaInvDet1x1(float *Ainv, float *Adet, float *A, int N)
 {
     int idx = blockIdx.x*blockDim.x + threadIdx.x;
     if (idx < N)
     {
-        double det = A[idx];
+        float det = A[idx];
         Adet[idx] = det;
         Ainv[idx] = 1.0 / det;
     }
 }
 
 
-__global__ void CudaInvDet2x2(double *Ainv, double *Adet, double *A, int N)
+__global__ void CudaInvDet2x2(float *Ainv, float *Adet, float *A, int N)
 {
     int idx = blockIdx.x*blockDim.x + threadIdx.x;
     if (idx < N)
     {
         int b = idx*4;
-        double A0 = A[b];
-        double A1 = A[b+1];
-        double A2 = A[b+2];
-        double A3 = A[b+3];
-        double det = (A0*A3 - A1*A2);
+        float A0 = A[b];
+        float A1 = A[b+1];
+        float A2 = A[b+2];
+        float A3 = A[b+3];
+        float det = (A0*A3 - A1*A2);
         Adet[idx] = det;
-        double invdet = 1.0 / det;
+        float invdet = 1.0 / det;
         Ainv[b+0] = invdet*A3;
         Ainv[b+1] = -invdet*A1;
         Ainv[b+2] = -invdet*A2;
@@ -243,25 +243,25 @@ __global__ void CudaInvDet2x2(double *Ainv, double *Adet, double *A, int N)
 }
 
 
-__global__ void CudaInvDet3x3(double *Ainv, double *Adet, double *A, int N)
+__global__ void CudaInvDet3x3(float *Ainv, float *Adet, float *A, int N)
 {
     int idx = blockIdx.x*blockDim.x + threadIdx.x;
     if (idx < N)
     {
         int b = idx*9;
-        double A0 = A[b];
-        double A1 = A[b+1];
-        double A2 = A[b+2];
-        double A3 = A[b+3];
-        double A4 = A[b+4];
-        double A5 = A[b+5];
-        double A6 = A[b+6];
-        double A7 = A[b+7];
-        double A8 = A[b+8];
-        double det = (A0*A4*A8 + A1*A5*A6 + A2*A3*A7 
+        float A0 = A[b];
+        float A1 = A[b+1];
+        float A2 = A[b+2];
+        float A3 = A[b+3];
+        float A4 = A[b+4];
+        float A5 = A[b+5];
+        float A6 = A[b+6];
+        float A7 = A[b+7];
+        float A8 = A[b+8];
+        float det = (A0*A4*A8 + A1*A5*A6 + A2*A3*A7 
                     - A6*A4*A2 - A7*A5*A0 - A8*A3*A1);        
         Adet[idx] = det;
-        double invdet = 1.0 / det;        
+        float invdet = 1.0 / det;        
         Ainv[b+0] = invdet*(A4*A8 - A5*A7);
         Ainv[b+1] = invdet*(A5*A6 - A3*A8);
         Ainv[b+2] = invdet*(A3*A7 - A4*A6);
@@ -275,7 +275,7 @@ __global__ void CudaInvDet3x3(double *Ainv, double *Adet, double *A, int N)
 }
 
 
-__global__ void CudaScatter(double *Aout, double *Ain, int *M, int *invM, int *invMOff, int N)
+__global__ void CudaScatter(float *Aout, float *Ain, int *M, int *invM, int *invMOff, int N)
 {
     int i = blockIdx.x*blockDim.x + threadIdx.x;
     if (i < N)
@@ -285,14 +285,14 @@ __global__ void CudaScatter(double *Aout, double *Ain, int *M, int *invM, int *i
 }
 
 
-__global__ void CudaSumGather(double *Aout, double *Ain, int *M, int *invM, int *invMOff, int N)
+__global__ void CudaSumGather(float *Aout, float *Ain, int *M, int *invM, int *invMOff, int N)
 {
     int iout = blockIdx.x*blockDim.x + threadIdx.x;
     if (iout < N)
     {
         int in_beg = invMOff[iout];
         int in_end = invMOff[iout + 1];
-        double sum = 0.0;
+        float sum = 0.0;
         for (int iin = in_beg; iin < in_end; ++iin)
         {
             sum += Ain[invM[iin]];

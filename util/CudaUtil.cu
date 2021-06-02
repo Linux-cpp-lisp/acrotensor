@@ -52,6 +52,7 @@ void CudaKernel::GenerateFunction()
                                           NULL));        // includeNames
 
     std::string regstr = "--maxrregcount=" + std::to_string(MaxRegCount);
+    // TODO:
     const char *opts[5] = {"--restrict","--use_fast_math","--gpu-architecture=compute_60","-lineinfo",regstr.c_str()};
     int num_options = (MaxRegCount > 0) ? 5 : 4;
     nvrtcResult rcode = nvrtcCompileProgram(prog,  // prog
@@ -120,7 +121,7 @@ void CudaKernel::WriteCodeToFile(std::string &fname)
 
 
 
-__global__ void CudaSet(double *d, double val, int N)
+__global__ void CudaSet(float *d, float val, int N)
 {
     int idx = blockIdx.x*blockDim.x + threadIdx.x;
     if (idx < N)
@@ -130,7 +131,7 @@ __global__ void CudaSet(double *d, double val, int N)
 }
 
 
-__global__ void CudaMult(double *d, double c, int N)
+__global__ void CudaMult(float *d, float c, int N)
 {
     int idx = blockIdx.x*blockDim.x + threadIdx.x;
     if (idx < N)
