@@ -42,13 +42,16 @@ class AcroEinsumFunction : public torch::autograd::Function<AcroEinsumFunction> 
         size_t op_index = 0;
         for (auto it = einstr.begin(); it < einstr.end(); it++) {
             switch (*it) {
-                case ',':
                 case '-':
+                    it++;  // consume the >
+                    TORCH_CHECK(*it == '>', "Malformed formula (- without >)");
+                    // continue on, since now we'll have to get the output labels
+                case ',':
+                    TORCH_CHECK(operand_labels[op_index].size() > 0, "Cannot have empty index labels");
                     op_index++;
                     break;
-                case '>':
-                    break;
                 default:
+                    TORCH_CHECK(std::islower(*it), "Unallowed character in einsum formula (note that ellipsis is not supported)");
                     operand_labels[op_index].push_back(*it);
             }
         }
