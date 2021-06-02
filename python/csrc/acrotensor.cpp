@@ -64,9 +64,11 @@ class AcroEinsumFunction : public torch::autograd::Function<AcroEinsumFunction> 
         ctx->save_for_backward(operands);
 
         // Make acrotensor einstring
+        // We also make the output size here, since we're looping anyway
         std::vector<char> acrostr;
+        std::unordered_map<char, int64_t> dim_sizes;
         acrostr.reserve(200); // some number, TODO
-        acrostr.push_back('Z');
+        acrostr.push_back('Z'); // output variable; this assumes less than 26 but we're gueranteed that
         // last labels are output labels:
         for (auto it = operand_labels.back().begin(); it < operand_labels.back().end(); it++) {
             acrostr.push_back('_');
@@ -75,12 +77,24 @@ class AcroEinsumFunction : public torch::autograd::Function<AcroEinsumFunction> 
         acrostr.push_back(' ');
         acrostr.push_back('=');
         // operands
+        size_t label_i;
         for (op_index = 0; op_index < operands.size(); op_index++) {
             acrostr.push_back(' ');
             acrostr.push_back('A' + op_index);
+            label_i = 0;
             for (auto it = operand_labels[op_index].begin(); it < operand_labels[op_index].end(); it++) {
                 acrostr.push_back('_');
                 acrostr.push_back(*it);
+                // Save or check dimension size
+                if (dim_sizes.find(*it) == dim_sizes.end()) {
+                    // add it
+                    dim_sizes[*it] = operands[op_index].size(label_i);
+                }
+                else {
+                    // check it
+                    TORCH_CHECK(operands[op_index].size(label_i) == dim_sizes[*it], "Inconsistant operand dimensions");
+                }
+                label_i++;
             }
         }
 
@@ -100,10 +114,18 @@ class AcroEinsumFunction : public torch::autograd::Function<AcroEinsumFunction> 
             operands_acro_ptr[op_index] = &operands_acro[op_index];
         }
 
+        // Make output shape
+        std::vector<int64_t> outshape;
+        std::vector<int> outshape_acro;  // TODO: update to use int64 in acro
+        for (auto it = operand_labels.back().begin(); it < operand_labels.back().end(); it++) {
+            outshape.push_back(dim_sizes[*it]);
+            outshape_acro.push_back(outshape.back());
+        }
+
         auto options = torch::TensorOptions().dtype(torch::kFloat64);
-        auto out = torch::empty({3, 3}, options);
+        auto out = torch::empty(outshape, options);
         acro::Tensor out_acro = acro::Tensor(
-            3, 3,
+            outshape_acro,
             out.data_ptr<double>()
         );
 
