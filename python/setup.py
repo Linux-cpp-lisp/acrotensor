@@ -8,8 +8,6 @@ dirs = [
     for d in ["", "exec", "tensor", "util", "ops", "kernel", "python/csrc"]
 ]
 
-breakpoint()
-
 setup(
     name="acrotensor",
     version="0.1.0",
@@ -27,7 +25,7 @@ setup(
             start=[]
         ),
         include_dirs=dirs,
-        extra_compile_args=["--std=c++11"],
+        extra_compile_args=["--std=c++11", "-g"],
     )],
     cmdclass={'build_ext': cpp_extension.BuildExtension}
 )

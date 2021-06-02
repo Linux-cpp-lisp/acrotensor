@@ -12,6 +12,9 @@
 
 using namespace torch::autograd;
 
+
+// TODO: use fixed size arrays?
+
 class AcroEinsumFunction : public torch::autograd::Function<AcroEinsumFunction> {
     public:
     static torch::Tensor forward(
@@ -58,7 +61,8 @@ class AcroEinsumFunction : public torch::autograd::Function<AcroEinsumFunction> 
         ctx->save_for_backward(operands);
 
         // Make acrotensor einstring
-        std::vector<char> acrostr(200); // some number
+        std::vector<char> acrostr;
+        acrostr.reserve(200); // some number, TODO
         acrostr.push_back('Z');
         // last labels are output labels:
         for (auto it = operand_labels.back().begin(); it < operand_labels.back().end(); it++) {
@@ -93,7 +97,8 @@ class AcroEinsumFunction : public torch::autograd::Function<AcroEinsumFunction> 
             operands_acro_ptr[op_index] = &operands_acro[op_index];
         }
 
-        auto out = torch::empty({3, 3});
+        auto options = torch::TensorOptions().dtype(torch::kFloat64);
+        auto out = torch::empty({3, 3}, options);
         acro::Tensor out_acro = acro::Tensor(
             3, 3,
             out.data_ptr<double>()
