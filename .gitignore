@@ -174,3 +174,5 @@ cython_debug/
 unittest/test
 config/
 inc/
+
+.vscode/
