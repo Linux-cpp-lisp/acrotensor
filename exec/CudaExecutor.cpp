@@ -40,7 +40,7 @@ void CudaExecutor::ExecuteSingle(Tensor *output, std::vector<Tensor*> &inputs)
     int numuvars = MultiKernel->GetNumUVars();
     if (KernelParams.size() == 0)
     {
-        HDeviceTensors = new double*[numuvars];
+        HDeviceTensors = new float*[numuvars];
         KernelParams.resize(numuvars);
     }
 
@@ -48,7 +48,7 @@ void CudaExecutor::ExecuteSingle(Tensor *output, std::vector<Tensor*> &inputs)
     {
         auto ki_vari = MultiKernel->GetFirstKiVariForUVari(uvari);
         int vari = ki_vari.second;
-        double *dtensor;
+        float *dtensor;
         if (vari == -1)
         {
             dtensor = output->GetDeviceData();
@@ -76,7 +76,7 @@ void CudaExecutor::ExecuteMulti(std::vector<Tensor*> &outputs, std::vector<std::
     int numuvars = MultiKernel->GetNumUVars();
     if (KernelParams.size() == 0)
     {
-        HDeviceTensors = new double*[numuvars];
+        HDeviceTensors = new float*[numuvars];
         KernelParams.resize(numuvars);
     }
 
@@ -85,7 +85,7 @@ void CudaExecutor::ExecuteMulti(std::vector<Tensor*> &outputs, std::vector<std::
         auto ki_vari = MultiKernel->GetFirstKiVariForUVari(uvari);
         int ki = ki_vari.first;
         int vari = ki_vari.second;
-        double *dtensor;
+        float *dtensor;
         if (vari == -1)
         {
             dtensor = outputs[ki]->GetDeviceData();
@@ -117,7 +117,7 @@ void CudaExecutor::GenerateCudaKernel()
     "__launch_bounds__(<BLOCK_SIZE>)\n"
     "void <KERNEL_NAME>(<PARAMS>)\n"
     "{\n"
-    "    double sum;\n"
+    "    float sum;\n"
     "    const unsigned int outidx = blockIdx.x;\n"
     "\n"
         "<SMWR_BUFFER>"
@@ -147,11 +147,11 @@ void CudaExecutor::GenerateCudaKernel()
     {
         if (MultiKernel->IsOutputUVar(uvari))
         {
-            params_str += "double * const T" + std::to_string(uvari);
+            params_str += "float * const T" + std::to_string(uvari);
         }
         else
         {
-            params_str += "double const * const T" + std::to_string(uvari);
+            params_str += "float const * const T" + std::to_string(uvari);
         }
 
         if (uvari < MultiKernel->GetNumUVars()-1)
@@ -300,7 +300,7 @@ void CudaExecutor::GetSharedMemWRKernels()
             {
                 if (MultiKernel->GetUVari(ki+1, vari) == outuvari)
                 {
-                    int onblock_var_idxsize = 8;            //Bytes/double
+                    int onblock_var_idxsize = 8;            //Bytes/float
                     for (int di = 0; di < MultiKernel->GetVarRank(ki, vari); ++di)
                     {
                         int loopi = MultiKernel->GetVarDimLoopNum(ki, vari, di);
@@ -397,7 +397,7 @@ std::string CudaExecutor::GenSharedMemWRBuffer()
     std::string smwr_str;
     if (SMWRBufferSize > 0)
     {
-        smwr_str += "    __shared__ double SMWR[" + std::to_string(SMWRBufferSize / 8) + "];\n";
+        smwr_str += "    __shared__ float SMWR[" + std::to_string(SMWRBufferSize / 8) + "];\n";
     }
     return smwr_str;
 }
@@ -411,7 +411,7 @@ std::string CudaExecutor::GenSharedMemPreload()
     {
         if (SharedMemUvars[uvari])
         {
-            preload_sm_str += "    __shared__ double sT" + std::to_string(uvari);
+            preload_sm_str += "    __shared__ float sT" + std::to_string(uvari);
             preload_sm_str += "[" + std::to_string(MultiKernel->GetVarSize(uvari)) + "];\n";
         }
     }
@@ -558,7 +558,7 @@ std::string CudaExecutor::GenSubKernelLoops()
                             std::string ivaristr = std::to_string(ivari);
                             std::string uvaristr = std::to_string(uvari);
                             std::string varidxstr = GenVarIndex(ki, ivari, blocki);     
-                            temp += "        double hIN" + ivaristr + " = __ldg(&" + GenTensor(uvari) + "[" + varidxstr + "]);\n";
+                            temp += "        float hIN" + ivaristr + " = __ldg(&" + GenTensor(uvari) + "[" + varidxstr + "]);\n";
                             hoisted[ivari] = true;
                         }
                     }

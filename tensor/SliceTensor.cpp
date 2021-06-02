@@ -151,8 +151,8 @@ void SliceTensor::SliceInit(Tensor &T, std::vector<int> &sind)
     }
 
     Offset = T.GetRawIndex(sind);
-    double *hdata = T.GetData();
-    double *ddata = T.GetDeviceData();
+    float *hdata = T.GetData();
+    float *ddata = T.GetDeviceData();
     if (hdata)
     {
         hdata += Offset;
@@ -168,13 +168,13 @@ void SliceTensor::SliceInit(Tensor &T, std::vector<int> &sind)
 }
 
 
-double* SliceTensor::GetData() const
+float* SliceTensor::GetData() const
 {
     return FullT->GetData() + Offset;
 }
 
 
-double* SliceTensor::GetDeviceData() const
+float* SliceTensor::GetDeviceData() const
 {
     return FullT->GetDeviceData() + Offset;
 }

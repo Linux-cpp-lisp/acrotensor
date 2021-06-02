@@ -22,14 +22,14 @@ Tensor::Tensor()
 }
 
 
-Tensor::Tensor(std::vector<int> &dims, double *hdata, double *ddata, bool ongpu)
+Tensor::Tensor(std::vector<int> &dims, float *hdata, float *ddata, bool ongpu)
 {
     Initialized = false;
     Init(dims, hdata, ddata, ongpu);
 }
 
 
-Tensor::Tensor(int d0, double *hdata, double *ddata, bool ongpu)
+Tensor::Tensor(int d0, float *hdata, float *ddata, bool ongpu)
 {
     Initialized = false;
     std::vector<int> dims = {d0};
@@ -37,7 +37,7 @@ Tensor::Tensor(int d0, double *hdata, double *ddata, bool ongpu)
 }
 
 
-Tensor::Tensor(int d0, int d1, double *hdata, double *ddata, bool ongpu)
+Tensor::Tensor(int d0, int d1, float *hdata, float *ddata, bool ongpu)
 {
     Initialized = false;
     std::vector<int> dims = {d0, d1};
@@ -45,7 +45,7 @@ Tensor::Tensor(int d0, int d1, double *hdata, double *ddata, bool ongpu)
 }
 
 
-Tensor::Tensor(int d0, int d1, int d2, double *hdata, double *ddata, bool ongpu)
+Tensor::Tensor(int d0, int d1, int d2, float *hdata, float *ddata, bool ongpu)
 {
     Initialized = false;
     std::vector<int> dims = {d0, d1, d2};
@@ -53,7 +53,7 @@ Tensor::Tensor(int d0, int d1, int d2, double *hdata, double *ddata, bool ongpu)
 }
 
 
-Tensor::Tensor(int d0, int d1, int d2, int d3, double *hdata, double *ddata, bool ongpu)
+Tensor::Tensor(int d0, int d1, int d2, int d3, float *hdata, float *ddata, bool ongpu)
 {
     Initialized = false;
     std::vector<int> dims = {d0, d1, d2, d3};
@@ -61,7 +61,7 @@ Tensor::Tensor(int d0, int d1, int d2, int d3, double *hdata, double *ddata, boo
 }
 
 
-Tensor::Tensor(int d0, int d1, int d2, int d3, int d4, double *hdata, double *ddata, bool ongpu)
+Tensor::Tensor(int d0, int d1, int d2, int d3, int d4, float *hdata, float *ddata, bool ongpu)
 {
     Initialized = false;
     std::vector<int> dims = {d0, d1, d2, d3, d4};
@@ -69,7 +69,7 @@ Tensor::Tensor(int d0, int d1, int d2, int d3, int d4, double *hdata, double *dd
 }
 
 
-Tensor::Tensor(int d0, int d1, int d2, int d3, int d4, int d5, double *hdata, double *ddata, bool ongpu)
+Tensor::Tensor(int d0, int d1, int d2, int d3, int d4, int d5, float *hdata, float *ddata, bool ongpu)
 {
     Initialized = false;
     std::vector<int> dims = {d0, d1, d2, d3, d4, d5};
@@ -77,7 +77,7 @@ Tensor::Tensor(int d0, int d1, int d2, int d3, int d4, int d5, double *hdata, do
 }
 
 
-Tensor::Tensor(int d0, int d1, int d2, int d3, int d4, int d5, int d6, double *hdata, double *ddata, bool ongpu)
+Tensor::Tensor(int d0, int d1, int d2, int d3, int d4, int d5, int d6, float *hdata, float *ddata, bool ongpu)
 {
     Initialized = false;
     std::vector<int> dims = {d0, d1, d2, d3, d4, d5, d6};
@@ -85,7 +85,7 @@ Tensor::Tensor(int d0, int d1, int d2, int d3, int d4, int d5, int d6, double *h
 }
 
 
-Tensor::Tensor(int d0, int d1, int d2, int d3, int d4, int d5, int d6, int d7, double *hdata, double *ddata, bool ongpu)
+Tensor::Tensor(int d0, int d1, int d2, int d3, int d4, int d5, int d6, int d7, float *hdata, float *ddata, bool ongpu)
 {
     Initialized = false;
     std::vector<int> dims = {d0, d1, d2, d3, d4, d5, d6, d7};
@@ -93,77 +93,77 @@ Tensor::Tensor(int d0, int d1, int d2, int d3, int d4, int d5, int d6, int d7, d
 }
 
 
-Tensor::Tensor(int d0, int d1, int d2, int d3, int d4, int d5, int d6, int d7, int d8, double *hdata, double *ddata, bool ongpu)
+Tensor::Tensor(int d0, int d1, int d2, int d3, int d4, int d5, int d6, int d7, int d8, float *hdata, float *ddata, bool ongpu)
 {
     Initialized = false;
     Init(d0, d1, d2, d3, d4, d5, d6, d7, d8, hdata, ddata, ongpu);
 }
 
 
-void Tensor::Init(int d0, double *hdata, double *ddata, bool ongpu)
+void Tensor::Init(int d0, float *hdata, float *ddata, bool ongpu)
 {
     std::vector<int> dims = {d0};
     Init(dims, hdata, ddata, ongpu);
 }
 
 
-void Tensor::Init(int d0, int d1, double *hdata, double *ddata, bool ongpu)
+void Tensor::Init(int d0, int d1, float *hdata, float *ddata, bool ongpu)
 {
     std::vector<int> dims = {d0, d1};
     Init(dims, hdata, ddata, ongpu);
 }
 
 
-void Tensor::Init(int d0, int d1, int d2, double *hdata, double *ddata, bool ongpu)
+void Tensor::Init(int d0, int d1, int d2, float *hdata, float *ddata, bool ongpu)
 {
     std::vector<int> dims = {d0, d1, d2};
     Init(dims, hdata, ddata, ongpu);
 }
 
 
-void Tensor::Init(int d0, int d1, int d2, int d3, double *hdata, double *ddata, bool ongpu)
+void Tensor::Init(int d0, int d1, int d2, int d3, float *hdata, float *ddata, bool ongpu)
 {
     std::vector<int> dims = {d0, d1, d2, d3};
     Init(dims, hdata, ddata, ongpu);
 }
 
 
-void Tensor::Init(int d0, int d1, int d2, int d3, int d4, double *hdata, double *ddata, bool ongpu)
+void Tensor::Init(int d0, int d1, int d2, int d3, int d4, float *hdata, float *ddata, bool ongpu)
 {
     std::vector<int> dims = {d0, d1, d2, d3, d4};
     Init(dims, hdata, ddata, ongpu);
 }
 
 
-void Tensor::Init(int d0, int d1, int d2, int d3, int d4, int d5, double *hdata, double *ddata, bool ongpu)
+void Tensor::Init(int d0, int d1, int d2, int d3, int d4, int d5, float *hdata, float *ddata, bool ongpu)
 {
     std::vector<int> dims = {d0, d1, d2, d3, d4, d5};
     Init(dims, hdata, ddata, ongpu);
 }
 
 
-void Tensor::Init(int d0, int d1, int d2, int d3, int d4, int d5, int d6, double *hdata, double *ddata, bool ongpu)
+void Tensor::Init(int d0, int d1, int d2, int d3, int d4, int d5, int d6, float *hdata, float *ddata, bool ongpu)
 {
     std::vector<int> dims = {d0, d1, d2, d3, d4, d5, d6};
     Init(dims, hdata, ddata, ongpu);
 }
 
 
-void Tensor::Init(int d0, int d1, int d2, int d3, int d4, int d5, int d6, int d7, double *hdata, double *ddata, bool ongpu)
+void Tensor::Init(int d0, int d1, int d2, int d3, int d4, int d5, int d6, int d7, float *hdata, float *ddata, bool ongpu)
 {
     std::vector<int> dims = {d0, d1, d2, d3, d4, d5, d6, d7};
     Init(dims, hdata, ddata, ongpu);
 }
 
 
-void Tensor::Init(int d0, int d1, int d2, int d3, int d4, int d5, int d6, int d7, int d8, double *hdata, double *ddata, bool ongpu)
+void Tensor::Init(int d0, int d1, int d2, int d3, int d4, int d5, int d6, int d7, int d8, float *hdata, float *ddata, bool ongpu)
 {
     std::vector<int> dims = {d0, d1, d2, d3, d4, d5, d6, d7, d8};
     Init(dims, hdata, ddata, ongpu);
 }
 
 
-void Tensor::Init(std::vector<int> &dims, double *hdata, double *ddata, bool ongpu)
+void Tensor::Init(std::vector<int> &dims, float *hdata, float *ddata, bool ongpu)
 {
     ACROBATIC_ASSERT(!IsInitialized(), "Can't initilize a tensor a second time.")
     ACROBATIC_ASSERT(dims.size() > 0, "Cant initilize tensor without any dimensions.");
@@ -176,7 +176,7 @@ void Tensor::Init(std::vector<int> &dims, double *hdata, double *ddata, bool ong
     ComputeSize();
     if (hdata == nullptr)
     {
-        Data = new double[Size];
+        Data = new float[Size];
         OwnsData = true;
     }
     else
@@ -189,8 +189,8 @@ void Tensor::Init(std::vector<int> &dims, double *hdata, double *ddata, bool ong
     DeviceData = ddata;
     if (ddata != nullptr)
     {
-        ACROBATIC_ASSERT(hdata != nullptr, 
-                        "Acrotensor does not currently support GPU only tensors.");
+        // ACROBATIC_ASSERT(hdata != nullptr, 
+        //                 "Acrotensor does not currently support GPU only tensors.");
         MappedToGPU = true;
     }
 
@@ -297,7 +297,7 @@ void Tensor::Reshape(int d0, int d1, int d2, int d3, int d4, int d5, int d6, int
 }
 
 
-void Tensor::Retarget(double *hdata, double *ddata)
+void Tensor::Retarget(float *hdata, float *ddata)
 {
     ACROBATIC_ASSERT(!OwnsData);
     Data = hdata;
@@ -324,10 +324,10 @@ void Tensor::ComputeSize()
     {
         Size *= Dims[d];
     }
-    ByteSize = Size*sizeof(double);
+    ByteSize = Size*sizeof(float);
 }
 
-void Tensor::Set(double val)
+void Tensor::Set(float val)
 {
     if (!IsOnGPU())
     {
@@ -347,7 +347,7 @@ void Tensor::Set(double val)
 }
 
 
-void Tensor::Mult(double c)
+void Tensor::Mult(float c)
 {
     if (!IsOnGPU())
     {

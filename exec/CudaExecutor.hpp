@@ -52,7 +52,7 @@ class CudaExecutor : public KernelExecutor
     CudaKernel *TheCudaKernel;
 
     int NumBlockLoops;
-    double **HDeviceTensors;
+    float **HDeviceTensors;
 
     int SharedMemAllocated;
     int SMWRBufferSize;

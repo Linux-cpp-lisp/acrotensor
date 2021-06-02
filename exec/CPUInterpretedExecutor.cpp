@@ -29,7 +29,7 @@ CPUInterpretedExecutor::CPUInterpretedExecutor(DimensionedMultiKernel *multi_ker
     InputRanks = new int[NumInVars];
     InputLoopNums = new int*[NumInVars]; 
     InputStrides = new int*[NumInVars];
-    InputVars = new double*[NumInVars];
+    InputVars = new float*[NumInVars];
     for (int vari = 0; vari < NumInVars; ++vari)
     {
         InputRanks[vari] = FirstKernel->GetVarRank(vari);

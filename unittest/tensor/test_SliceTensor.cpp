@@ -136,14 +136,14 @@ TEST_CASE("Basic SliceTensor unit tests", "[SliceTensor]")
       {
          Tensor T(2, 3);
          T.MapToGPU();
-         double *t_cpu = T.GetData();
-         double *t_gpu = T.GetDeviceData();
+         float *t_cpu = T.GetData();
+         float *t_gpu = T.GetDeviceData();
          CHECK(t_cpu != t_gpu);
          CHECK(T.GetCurrentData() == t_cpu);
 
          SliceTensor S(T, 0);
-         double *s_cpu = S.GetData();
-         double *s_gpu = S.GetDeviceData();
+         float *s_cpu = S.GetData();
+         float *s_gpu = S.GetDeviceData();
          CHECK(s_cpu != s_gpu);
          CHECK(S.GetCurrentData() == s_cpu);
          CHECK(S.IsMappedToGPU());

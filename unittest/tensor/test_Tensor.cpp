@@ -126,7 +126,7 @@ TEST_CASE("Basic Tensor unit tests", "[Tensor]")
       Tensor T(6);
       for (int flatidx = 0; flatidx < T.GetSize(); ++flatidx)
       {
-         T[flatidx] = double(flatidx);
+         T[flatidx] = float(flatidx);
       }
 
       T.Reshape(3, 2);
@@ -137,7 +137,7 @@ TEST_CASE("Basic Tensor unit tests", "[Tensor]")
 
    SECTION("Tensor on existing data")
    {
-      double data[6] = {0.0, 1.0, 2.0, 3.0, 4.0, 5.0};
+      float data[6] = {0.0, 1.0, 2.0, 3.0, 4.0, 5.0};
       Tensor T(2, 3, data);
       REQUIRE(T(1,1) == Approx(4.0));
    }

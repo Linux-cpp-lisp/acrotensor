@@ -30,17 +30,17 @@ class CudaGPUOps : public NonContractionOps
 };
 
 
-__global__ void CudaInv1x1(double *Ainv, double *A, int N);
-__global__ void CudaInv2x2(double *Ainv, double *A, int N);
-__global__ void CudaInv3x3(double *Ainv, double *A, int N);
-__global__ void CudaDet1x1(double *Adet, double *A, int N);
-__global__ void CudaDet2x2(double *Adet, double *A, int N);
-__global__ void CudaDet3x3(double *Adet, double *A, int N);
-__global__ void CudaInvDet1x1(double *Ainv, double *Adet, double *A, int N);
-__global__ void CudaInvDet2x2(double *Ainv, double *Adet, double *A, int N);
-__global__ void CudaInvDet3x3(double *Ainv, double *Adet, double *A, int N);
-__global__ void CudaScatter(double *Aout, double *Ain, int *M, int *invM, int *invMOff, int N);
-__global__ void CudaSumGather(double *Aout, double *Ain, int *M, int *invM, int *invMOff, int N);
+__global__ void CudaInv1x1(float *Ainv, float *A, int N);
+__global__ void CudaInv2x2(float *Ainv, float *A, int N);
+__global__ void CudaInv3x3(float *Ainv, float *A, int N);
+__global__ void CudaDet1x1(float *Adet, float *A, int N);
+__global__ void CudaDet2x2(float *Adet, float *A, int N);
+__global__ void CudaDet3x3(float *Adet, float *A, int N);
+__global__ void CudaInvDet1x1(float *Ainv, float *Adet, float *A, int N);
+__global__ void CudaInvDet2x2(float *Ainv, float *Adet, float *A, int N);
+__global__ void CudaInvDet3x3(float *Ainv, float *Adet, float *A, int N);
+__global__ void CudaScatter(float *Aout, float *Ain, int *M, int *invM, int *invMOff, int N);
+__global__ void CudaSumGather(float *Aout, float *Ain, int *M, int *invM, int *invMOff, int N);
 
 }
 

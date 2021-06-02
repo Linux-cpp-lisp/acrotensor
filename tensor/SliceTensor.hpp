@@ -37,11 +37,11 @@ class SliceTensor : public Tensor
     void SliceInit(Tensor &T, int d0, int d1, int d2, int d3, int d4, int d5, int d6, int d7, int d8);    
     ~SliceTensor() {}
 
-    virtual void Retarget(double *hdata, double*ddata=nullptr) {ACROBATIC_ASSERT(false, "Retarget not supported on SliceTensors");}
+    virtual void Retarget(float *hdata, float*ddata=nullptr) {ACROBATIC_ASSERT(false, "Retarget not supported on SliceTensors");}
 
     //Routines for Data on the GPU
-    virtual double* GetData() const;
-    virtual double* GetDeviceData() const;
+    virtual float* GetData() const;
+    virtual float* GetDeviceData() const;
     virtual void MapToGPU();
     virtual void MoveToGPU();
     virtual void SwitchToGPU();

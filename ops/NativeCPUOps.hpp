@@ -26,24 +26,24 @@ class NativeCPUOps : public NonContractionOps
     void FlatIndexedSumGather(Tensor &Aout, Tensor &Ain, IndexMapping &M);
 
     private:
-    inline void Inv1x1(double *Ainv, double *A, double det);
-    inline void Inv2x2(double *Ainv, double *A, double det);
-    inline void Inv3x3(double *Ainv, double *A, double det);
-    inline double Det1x1(double *A);
-    inline double Det2x2(double *A);
-    inline double Det3x3(double *A);
+    inline void Inv1x1(float *Ainv, float *A, float det);
+    inline void Inv2x2(float *Ainv, float *A, float det);
+    inline void Inv3x3(float *Ainv, float *A, float det);
+    inline float Det1x1(float *A);
+    inline float Det2x2(float *A);
+    inline float Det3x3(float *A);
 };
 
 
-inline void NativeCPUOps::Inv1x1(double *Ainv, double *A, double det)
+inline void NativeCPUOps::Inv1x1(float *Ainv, float *A, float det)
 {
     Ainv[0] = 1.0 / det;
 }
 
 
-inline void NativeCPUOps::Inv2x2(double *Ainv, double *A, double det)
+inline void NativeCPUOps::Inv2x2(float *Ainv, float *A, float det)
 {
-    double invdet = 1.0 / det;
+    float invdet = 1.0 / det;
     Ainv[0] = invdet*A[3];
     Ainv[1] = -invdet*A[1];
     Ainv[2] = -invdet*A[2];
@@ -52,9 +52,9 @@ inline void NativeCPUOps::Inv2x2(double *Ainv, double *A, double det)
 }
 
 
-inline void NativeCPUOps::Inv3x3(double *Ainv, double *A, double det)
+inline void NativeCPUOps::Inv3x3(float *Ainv, float *A, float det)
 {
-    double invdet = 1.0 / det;
+    float invdet = 1.0 / det;
     Ainv[0] = invdet*(A[4]*A[8] - A[5]*A[7]);
     Ainv[1] = invdet*(A[5]*A[6] - A[3]*A[8]);
     Ainv[2] = invdet*(A[3]*A[7] - A[4]*A[6]);
@@ -67,19 +67,19 @@ inline void NativeCPUOps::Inv3x3(double *Ainv, double *A, double det)
 }
 
 
-inline double NativeCPUOps::Det1x1(double *A)
+inline float NativeCPUOps::Det1x1(float *A)
 {
     return A[0];
 }
 
 
-inline double NativeCPUOps::Det2x2(double *A)
+inline float NativeCPUOps::Det2x2(float *A)
 {
     return (A[0]*A[3] - A[1]*A[2]);
 }
 
 
-inline double NativeCPUOps::Det3x3(double *A)
+inline float NativeCPUOps::Det3x3(float *A)
 {
     return (A[0]*A[4]*A[8] + A[1]*A[5]*A[6] + A[2]*A[3]*A[7] 
           - A[6]*A[4]*A[2] - A[7]*A[5]*A[0] - A[8]*A[3]*A[1]);

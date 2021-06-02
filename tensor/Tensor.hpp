@@ -19,32 +19,32 @@ class Tensor
     Tensor();
 
     //Construct a tensor with the proper dimensions 
-    Tensor(std::vector<int> &dims, double *hdata=nullptr, double *ddata=nullptr, bool ongpu=false);
-    Tensor(int d0, double *hdata=nullptr, double *ddata=nullptr, bool ongpu=false);
-    Tensor(int d0, int d1, double *hdata=nullptr, double *ddata=nullptr, bool ongpu=false);
-    Tensor(int d0, int d1, int d2, double *hdata=nullptr, double *ddata=nullptr, bool ongpu=false);
-    Tensor(int d0, int d1, int d2, int d3, double *hdata=nullptr, double *ddata=nullptr, bool ongpu=false);
-    Tensor(int d0, int d1, int d2, int d3, int d4, double *hdata=nullptr, double *ddata=nullptr, bool ongpu=false);
-    Tensor(int d0, int d1, int d2, int d3, int d4, int d5, double *hdata=nullptr, double *ddata=nullptr, bool ongpu=false);
-    Tensor(int d0, int d1, int d2, int d3, int d4, int d5, int d6, double *hdata=nullptr, double *ddata=nullptr, bool ongpu=false);
-    Tensor(int d0, int d1, int d2, int d3, int d4, int d5, int d6, int d7, double *hdata=nullptr, double *ddata=nullptr, bool ongpu=false);
-    Tensor(int d0, int d1, int d2, int d3, int d4, int d5, int d6, int d7, int d8, double *hdata=nullptr, double *ddata=nullptr, bool ongpu=false);
+    Tensor(std::vector<int> &dims, float *hdata=nullptr, float *ddata=nullptr, bool ongpu=false);
+    Tensor(int d0, float *hdata=nullptr, float *ddata=nullptr, bool ongpu=false);
+    Tensor(int d0, int d1, float *hdata=nullptr, float *ddata=nullptr, bool ongpu=false);
+    Tensor(int d0, int d1, int d2, float *hdata=nullptr, float *ddata=nullptr, bool ongpu=false);
+    Tensor(int d0, int d1, int d2, int d3, float *hdata=nullptr, float *ddata=nullptr, bool ongpu=false);
+    Tensor(int d0, int d1, int d2, int d3, int d4, float *hdata=nullptr, float *ddata=nullptr, bool ongpu=false);
+    Tensor(int d0, int d1, int d2, int d3, int d4, int d5, float *hdata=nullptr, float *ddata=nullptr, bool ongpu=false);
+    Tensor(int d0, int d1, int d2, int d3, int d4, int d5, int d6, float *hdata=nullptr, float *ddata=nullptr, bool ongpu=false);
+    Tensor(int d0, int d1, int d2, int d3, int d4, int d5, int d6, int d7, float *hdata=nullptr, float *ddata=nullptr, bool ongpu=false);
+    Tensor(int d0, int d1, int d2, int d3, int d4, int d5, int d6, int d7, int d8, float *hdata=nullptr, float *ddata=nullptr, bool ongpu=false);
 
-    void Init(std::vector<int> &dims, double *hdata=nullptr, double *ddata=nullptr, bool ongpu=false);
-    void Init(int d0, double *hdata=nullptr, double *ddata=nullptr, bool ongpu=false);
-    void Init(int d0, int d1, double *hdata=nullptr, double *ddata=nullptr, bool ongpu=false);
-    void Init(int d0, int d1, int d2, double *hdata=nullptr, double *ddata=nullptr, bool ongpu=false);
-    void Init(int d0, int d1, int d2, int d3, double *hdata=nullptr, double *ddata=nullptr, bool ongpu=false);
-    void Init(int d0, int d1, int d2, int d3, int d4, double *hdata=nullptr, double *ddata=nullptr, bool ongpu=false);
-    void Init(int d0, int d1, int d2, int d3, int d4, int d5, double *hdata=nullptr, double *ddata=nullptr, bool ongpu=false);
-    void Init(int d0, int d1, int d2, int d3, int d4, int d5, int d6, double *hdata=nullptr, double *ddata=nullptr, bool ongpu=false);
-    void Init(int d0, int d1, int d2, int d3, int d4, int d5, int d6, int d7, double *hdata=nullptr, double *ddata=nullptr, bool ongpu=false);
-    void Init(int d0, int d1, int d2, int d3, int d4, int d5, int d6, int d7, int d8, double *hdata=nullptr, double *ddata=nullptr, bool ongpu=false);
+    void Init(std::vector<int> &dims, float *hdata=nullptr, float *ddata=nullptr, bool ongpu=false);
+    void Init(int d0, float *hdata=nullptr, float *ddata=nullptr, bool ongpu=false);
+    void Init(int d0, int d1, float *hdata=nullptr, float *ddata=nullptr, bool ongpu=false);
+    void Init(int d0, int d1, int d2, float *hdata=nullptr, float *ddata=nullptr, bool ongpu=false);
+    void Init(int d0, int d1, int d2, int d3, float *hdata=nullptr, float *ddata=nullptr, bool ongpu=false);
+    void Init(int d0, int d1, int d2, int d3, int d4, float *hdata=nullptr, float *ddata=nullptr, bool ongpu=false);
+    void Init(int d0, int d1, int d2, int d3, int d4, int d5, float *hdata=nullptr, float *ddata=nullptr, bool ongpu=false);
+    void Init(int d0, int d1, int d2, int d3, int d4, int d5, int d6, float *hdata=nullptr, float *ddata=nullptr, bool ongpu=false);
+    void Init(int d0, int d1, int d2, int d3, int d4, int d5, int d6, int d7, float *hdata=nullptr, float *ddata=nullptr, bool ongpu=false);
+    void Init(int d0, int d1, int d2, int d3, int d4, int d5, int d6, int d7, int d8, float *hdata=nullptr, float *ddata=nullptr, bool ongpu=false);
 
     ~Tensor();
 
     //Simple index into data
-    inline double &operator[](int raw_index);
+    inline float &operator[](int raw_index);
 
     //Get the simple raw linear index from the tensor indices
     inline int GetRawIndex(const std::vector<int> &indices);
@@ -59,16 +59,16 @@ class Tensor
     inline int GetRawIndex(int i0, int i1, int i2, int i3, int i4, int i5, int i6, int i7, int i8);
 
     //Tensor index into the data
-    inline double &operator()(std::vector<int> &indices);
-    inline double &operator()(int i0);
-    inline double &operator()(int i0, int i1);
-    inline double &operator()(int i0, int i1, int i2);
-    inline double &operator()(int i0, int i1, int i2, int i3);
-    inline double &operator()(int i0, int i1, int i2, int i3, int i4);
-    inline double &operator()(int i0, int i1, int i2, int i3, int i4, int i5);
-    inline double &operator()(int i0, int i1, int i2, int i3, int i4, int i5, int i6);
-    inline double &operator()(int i0, int i1, int i2, int i3, int i4, int i5, int i6, int i7);
-    inline double &operator()(int i0, int i1, int i2, int i3, int i4, int i5, int i6, int i7, int i8);
+    inline float &operator()(std::vector<int> &indices);
+    inline float &operator()(int i0);
+    inline float &operator()(int i0, int i1);
+    inline float &operator()(int i0, int i1, int i2);
+    inline float &operator()(int i0, int i1, int i2, int i3);
+    inline float &operator()(int i0, int i1, int i2, int i3, int i4);
+    inline float &operator()(int i0, int i1, int i2, int i3, int i4, int i5);
+    inline float &operator()(int i0, int i1, int i2, int i3, int i4, int i5, int i6);
+    inline float &operator()(int i0, int i1, int i2, int i3, int i4, int i5, int i6, int i7);
+    inline float &operator()(int i0, int i1, int i2, int i3, int i4, int i5, int i6, int i7, int i8);
 
     //Change the dimensions of the tensor without reorganizing the data representation
     void Reshape(std::vector<int> &dims);
@@ -86,12 +86,12 @@ class Tensor
     inline int GetSize() const ;
     inline int GetDim(int d) const ;
     inline int GetStride(int d) const;
-    virtual double *GetData() const;
-    virtual double *GetDeviceData() const;
-    inline double *GetCurrentData() const;
+    virtual float *GetData() const;
+    virtual float *GetDeviceData() const;
+    inline float *GetCurrentData() const;
 
     //Change where externally owned data is pointing
-    virtual void Retarget(double *hdata, double*ddata=nullptr);
+    virtual void Retarget(float *hdata, float*ddata=nullptr);
 
     //Routines for Data on the GPU
     virtual void MapToGPU();            //Allocate memory for the data on the GPU
@@ -104,8 +104,8 @@ class Tensor
     virtual bool IsOnGPU() const {return OnGPU;}
     virtual bool IsInitialized() const {return Initialized;}
 
-    void Set(double val);       //Sets all values in the tensor to a constant
-    void Mult(double c);        //Multiply all values by a constant
+    void Set(float val);       //Sets all values in the tensor to a constant
+    void Mult(float c);        //Multiply all values by a constant
 
     void Print();
 
@@ -122,8 +122,8 @@ class Tensor
     bool OwnsData;
     bool MappedToGPU;
     bool OnGPU;
-    double *Data;
-    double *DeviceData;
+    float *Data;
+    float *DeviceData;
 };
 
 
@@ -151,19 +151,19 @@ inline int Tensor::GetStride(int d) const
 }
 
 
-inline double *Tensor::GetData() const
+inline float *Tensor::GetData() const
 {
     return Data;
 }
 
 
-inline double *Tensor::GetDeviceData() const
+inline float *Tensor::GetDeviceData() const
 {
     return DeviceData;
 }
 
 
-inline double *Tensor::GetCurrentData() const
+inline float *Tensor::GetCurrentData() const
 {
     return (IsOnGPU()) ? DeviceData : Data;
 }
@@ -241,7 +241,7 @@ inline int Tensor::GetRawIndex(int i0, int i1, int i2, int i3, int i4, int i5, i
 }
 
 
-inline double &Tensor::operator()(std::vector<int> &indices) 
+inline float &Tensor::operator()(std::vector<int> &indices) 
 {
 #if DEBUG
     ACROBATIC_ASSERT(OnGPU, "You have accessed the CPU version of the data that is fresh on the GPU.");
@@ -249,7 +249,7 @@ inline double &Tensor::operator()(std::vector<int> &indices)
     return Data[GetRawIndex(indices)];
 }
 
-inline double &Tensor::operator()(int i0)
+inline float &Tensor::operator()(int i0)
 {
 #if DEBUG
     ACROBATIC_ASSERT(OnGPU, "You have accessed the CPU version of the data that is fresh on the GPU.");
@@ -258,7 +258,7 @@ inline double &Tensor::operator()(int i0)
 }
 
 
-inline double &Tensor::operator()(int i0, int i1)
+inline float &Tensor::operator()(int i0, int i1)
 {
 #if DEBUG
     ACROBATIC_ASSERT(OnGPU, "You have accessed the CPU version of the data that is fresh on the GPU.");
@@ -267,7 +267,7 @@ inline double &Tensor::operator()(int i0, int i1)
 }
 
 
-inline double &Tensor::operator[](int raw_index) 
+inline float &Tensor::operator[](int raw_index) 
 {
 #if DEBUG
     ACROBATIC_ASSERT(OnGPU, "You have accessed the CPU version of the data that is fresh on the GPU.");
@@ -275,7 +275,7 @@ inline double &Tensor::operator[](int raw_index)
     return Data[raw_index];
 }
 
-inline double &Tensor::operator()(int i0, int i1, int i2)
+inline float &Tensor::operator()(int i0, int i1, int i2)
 {
 #if DEBUG
     ACROBATIC_ASSERT(OnGPU, "You have accessed the CPU version of the data that is fresh on the GPU.");
@@ -284,7 +284,7 @@ inline double &Tensor::operator()(int i0, int i1, int i2)
 }
 
 
-inline double &Tensor::operator()(int i0, int i1, int i2, int i3)
+inline float &Tensor::operator()(int i0, int i1, int i2, int i3)
 {
 #if DEBUG
     ACROBATIC_ASSERT(OnGPU, "You have accessed the CPU version of the data that is fresh on the GPU.");
@@ -293,7 +293,7 @@ inline double &Tensor::operator()(int i0, int i1, int i2, int i3)
 }
 
 
-inline double &Tensor::operator()(int i0, int i1, int i2, int i3, int i4)
+inline float &Tensor::operator()(int i0, int i1, int i2, int i3, int i4)
 {
 #if DEBUG
     ACROBATIC_ASSERT(OnGPU, "You have accessed the CPU version of the data that is fresh on the GPU.");
@@ -302,7 +302,7 @@ inline double &Tensor::operator()(int i0, int i1, int i2, int i3, int i4)
 }
 
 
-inline double &Tensor::operator()(int i0, int i1, int i2, int i3, int i4, int i5)
+inline float &Tensor::operator()(int i0, int i1, int i2, int i3, int i4, int i5)
 {
 #if DEBUG
     ACROBATIC_ASSERT(OnGPU, "You have accessed the CPU version of the data that is fresh on the GPU.");
@@ -311,7 +311,7 @@ inline double &Tensor::operator()(int i0, int i1, int i2, int i3, int i4, int i5
 }
 
 
-inline double &Tensor::operator()(int i0, int i1, int i2, int i3, int i4, int i5, int i6)
+inline float &Tensor::operator()(int i0, int i1, int i2, int i3, int i4, int i5, int i6)
 {
 #if DEBUG
     ACROBATIC_ASSERT(OnGPU, "You have accessed the CPU version of the data that is fresh on the GPU.");
@@ -320,7 +320,7 @@ inline double &Tensor::operator()(int i0, int i1, int i2, int i3, int i4, int i5
 }
 
 
-inline double &Tensor::operator()(int i0, int i1, int i2, int i3, int i4, int i5, int i6, int i7)
+inline float &Tensor::operator()(int i0, int i1, int i2, int i3, int i4, int i5, int i6, int i7)
 {
 #if DEBUG
     ACROBATIC_ASSERT(OnGPU, "You have accessed the CPU version of the data that is fresh on the GPU.");
@@ -329,7 +329,7 @@ inline double &Tensor::operator()(int i0, int i1, int i2, int i3, int i4, int i5
 }
 
 
-inline double &Tensor::operator()(int i0, int i1, int i2, int i3, int i4, int i5, int i6, int i7, int i8)
+inline float &Tensor::operator()(int i0, int i1, int i2, int i3, int i4, int i5, int i6, int i7, int i8)
 {
 #if DEBUG
     ACROBATIC_ASSERT(OnGPU, "You have accessed the CPU version of the data that is fresh on the GPU.");

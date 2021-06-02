@@ -36,7 +36,7 @@ class CPUInterpretedExecutor : public KernelExecutor
     void Execute12Loops();
     void ExecuteArbitraryLoops();
 
-    inline double ComputeRHS(const int *RESTRICT I);
+    inline float ComputeRHS(const int *RESTRICT I);
     inline int ComputeRawIdx(const int *RESTRICT I, const int *loop_nums, const int *var_stride, int rank);
 
     int NumInVars;
@@ -44,20 +44,20 @@ class CPUInterpretedExecutor : public KernelExecutor
     std::vector<int> N;
 
     int OutputRank;
-    double *OutputVar;
+    float *OutputVar;
     int *OutputLoopNums;
     int *OutputStrides;
 
     int *InputRanks;
-    double **InputVars;
+    float **InputVars;
     int **InputLoopNums;
     int **InputStrides;
 };
 
 
-inline double CPUInterpretedExecutor::ComputeRHS(const int *RESTRICT I)
+inline float CPUInterpretedExecutor::ComputeRHS(const int *RESTRICT I)
 {
-    double rhs_val = InputVars[0][ComputeRawIdx(I, InputLoopNums[0], InputStrides[0], InputRanks[0])];
+    float rhs_val = InputVars[0][ComputeRawIdx(I, InputLoopNums[0], InputStrides[0], InputRanks[0])];
     for (int vari = 1; vari < NumInVars; ++vari)
     {
         rhs_val *= InputVars[vari][ComputeRawIdx(I, InputLoopNums[vari], InputStrides[vari], InputRanks[vari])];

@@ -1172,7 +1172,7 @@ std::string toString( wchar_t* const value );
 std::string toString( int value );
 std::string toString( unsigned long value );
 std::string toString( unsigned int value );
-std::string toString( const double value );
+std::string toString( const float value );
 std::string toString( const float value );
 std::string toString( bool value );
 std::string toString( char value );
@@ -1389,7 +1389,7 @@ namespace Catch {
         virtual void assertionEnded( AssertionResult const& result ) = 0;
         virtual bool sectionStarted(    SectionInfo const& sectionInfo,
                                         Counts& assertions ) = 0;
-        virtual void sectionEnded( SectionInfo const& name, Counts const& assertions, double _durationInSeconds ) = 0;
+        virtual void sectionEnded( SectionInfo const& name, Counts const& assertions, float _durationInSeconds ) = 0;
         virtual void pushScopedMessage( MessageInfo const& message ) = 0;
         virtual void popScopedMessage( MessageInfo const& message ) = 0;
 
@@ -1690,7 +1690,7 @@ namespace Catch {
         void start();
         unsigned int getElapsedNanoseconds() const;
         unsigned int getElapsedMilliseconds() const;
-        double getElapsedSeconds() const;
+        float getElapsedSeconds() const;
 
     private:
         uint64_t m_ticks;
@@ -2022,7 +2022,7 @@ namespace Detail {
 
     class Approx {
     public:
-        explicit Approx ( double value )
+        explicit Approx ( float value )
         :   m_epsilon( std::numeric_limits<float>::epsilon()*100 ),
             m_scale( 1.0 ),
             m_value( value )
@@ -2038,36 +2038,36 @@ namespace Detail {
             return Approx( 0 );
         }
 
-        Approx operator()( double value ) {
+        Approx operator()( float value ) {
             Approx approx( value );
             approx.epsilon( m_epsilon );
             approx.scale( m_scale );
             return approx;
         }
 
-        friend bool operator == ( double lhs, Approx const& rhs ) {
+        friend bool operator == ( float lhs, Approx const& rhs ) {
             // Thanks to Richard Harris for his help refining this formula
             return fabs( lhs - rhs.m_value ) < rhs.m_epsilon * (rhs.m_scale + (std::max)( fabs(lhs), fabs(rhs.m_value) ) );
         }
 
-        friend bool operator == ( Approx const& lhs, double rhs ) {
+        friend bool operator == ( Approx const& lhs, float rhs ) {
             return operator==( rhs, lhs );
         }
 
-        friend bool operator != ( double lhs, Approx const& rhs ) {
+        friend bool operator != ( float lhs, Approx const& rhs ) {
             return !operator==( lhs, rhs );
         }
 
-        friend bool operator != ( Approx const& lhs, double rhs ) {
+        friend bool operator != ( Approx const& lhs, float rhs ) {
             return !operator==( rhs, lhs );
         }
 
-        Approx& epsilon( double newEpsilon ) {
+        Approx& epsilon( float newEpsilon ) {
             m_epsilon = newEpsilon;
             return *this;
         }
 
-        Approx& scale( double newScale ) {
+        Approx& scale( float newScale ) {
             m_scale = newScale;
             return *this;
         }
@@ -2079,9 +2079,9 @@ namespace Detail {
         }
 
     private:
-        double m_epsilon;
-        double m_scale;
-        double m_value;
+        float m_epsilon;
+        float m_scale;
+        float m_value;
     };
 }
 
@@ -3535,8 +3535,8 @@ namespace Clara {
         };
 
         void parseIntoTokens( int argc, char const * const * argv, std::vector<Parser::Token>& tokens ) const {
-            const std::string doubleDash = "--";
-            for( int i = 1; i < argc && argv[i] != doubleDash; ++i )
+            const std::string floatDash = "--";
+            for( int i = 1; i < argc && argv[i] != floatDash; ++i )
                 parseIntoTokens( argv[i] , tokens);
         }
         void parseIntoTokens( std::string arg, std::vector<Parser::Token>& tokens ) const {
@@ -4471,7 +4471,7 @@ namespace Catch
     struct SectionStats {
         SectionStats(   SectionInfo const& _sectionInfo,
                         Counts const& _assertions,
-                        double _durationInSeconds,
+                        float _durationInSeconds,
                         bool _missingAssertions )
         :   sectionInfo( _sectionInfo ),
             assertions( _assertions ),
@@ -4488,7 +4488,7 @@ namespace Catch
 
         SectionInfo sectionInfo;
         Counts assertions;
-        double durationInSeconds;
+        float durationInSeconds;
         bool missingAssertions;
     };
 
@@ -5069,7 +5069,7 @@ namespace Catch {
             return true;
         }
 
-        virtual void sectionEnded( SectionInfo const& info, Counts const& prevAssertions, double _durationInSeconds ) {
+        virtual void sectionEnded( SectionInfo const& info, Counts const& prevAssertions, float _durationInSeconds ) {
             if( std::uncaught_exception() ) {
                 m_unfinishedSections.push_back( UnfinishedSections( info, prevAssertions, _durationInSeconds ) );
                 return;
@@ -5115,7 +5115,7 @@ namespace Catch {
             SectionInfo testCaseSection( testCaseInfo.lineInfo, testCaseInfo.name, testCaseInfo.description );
             m_reporter->sectionStarting( testCaseSection );
             Counts prevAssertions = m_totals.assertions;
-            double duration = 0;
+            float duration = 0;
             try {
                 m_lastAssertionInfo = AssertionInfo( "TEST_CASE", testCaseInfo.lineInfo, "", ResultDisposition::Normal );
                 TestCaseTracker::Guard guard( *m_testCaseTracker );
@@ -5167,13 +5167,13 @@ namespace Catch {
 
     private:
         struct UnfinishedSections {
-            UnfinishedSections( SectionInfo const& _info, Counts const& _prevAssertions, double _durationInSeconds )
+            UnfinishedSections( SectionInfo const& _info, Counts const& _prevAssertions, float _durationInSeconds )
             : info( _info ), prevAssertions( _prevAssertions ), durationInSeconds( _durationInSeconds )
             {}
 
             SectionInfo info;
             Counts prevAssertions;
-            double durationInSeconds;
+            float durationInSeconds;
         };
 
         TestRunInfo m_runInfo;
@@ -6621,7 +6621,7 @@ namespace Catch {
     unsigned int Timer::getElapsedMilliseconds() const {
         return static_cast<unsigned int>((getCurrentTicks() - m_ticks)/1000);
     }
-    double Timer::getElapsedSeconds() const {
+    float Timer::getElapsedSeconds() const {
         return (getCurrentTicks() - m_ticks)/1000000.0;
     }
 
@@ -6948,7 +6948,7 @@ std::string fpToString( T value, int precision ) {
     return d;
 }
 
-std::string toString( const double value ) {
+std::string toString( const float value ) {
     return fpToString( value, 10 );
 }
 std::string toString( const float value ) {
@@ -7867,7 +7867,7 @@ namespace Catch {
         }
 
         virtual void testGroupEnded( TestGroupStats const& testGroupStats ) {
-            double suiteTime = suiteTimer.getElapsedSeconds();
+            float suiteTime = suiteTimer.getElapsedSeconds();
             CumulativeReporterBase::testGroupEnded( testGroupStats );
             writeGroup( *m_testGroups.back(), suiteTime );
         }
@@ -7876,7 +7876,7 @@ namespace Catch {
             xml.endElement();
         }
 
-        void writeGroup( TestGroupNode const& groupNode, double suiteTime ) {
+        void writeGroup( TestGroupNode const& groupNode, float suiteTime ) {
             XmlWriter::ScopedElement e = xml.scopedElement( "testsuite" );
             TestGroupStats const& stats = groupNode.value;
             xml.writeAttribute( "name", stats.groupInfo.name );

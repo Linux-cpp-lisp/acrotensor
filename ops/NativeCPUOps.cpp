@@ -14,8 +14,8 @@ void NativeCPUOps::BatchMatrixInverse(Tensor &Ainv, Tensor &A)
     int mdim = A.GetDim(rank-1);
     int stride = mdim*mdim;
     int num_batch = A.GetSize() / stride;
-    double *A_ptr = A.GetData();
-    double *Ainv_ptr = Ainv.GetData();
+    float *A_ptr = A.GetData();
+    float *Ainv_ptr = Ainv.GetData();
     if (mdim == 1)
     {
         for (int i = 0; i < num_batch; ++i)
@@ -52,8 +52,8 @@ void NativeCPUOps::BatchMatrixDet(Tensor &Adet, Tensor &A)
     int mdim = A.GetDim(rank-1);
     int stride = mdim*mdim;
     int num_batch = A.GetSize() / stride;
-    double *A_ptr = A.GetData();
-    double *Adet_ptr = Adet.GetData();
+    float *A_ptr = A.GetData();
+    float *Adet_ptr = Adet.GetData();
     if (mdim == 1)
     {
         for (int i = 0; i < num_batch; ++i)
@@ -87,9 +87,9 @@ void NativeCPUOps::BatchMatrixInvDet(Tensor &Ainv, Tensor &Adet, Tensor &A)
     int mdim = A.GetDim(rank-1);
     int stride = mdim*mdim;
     int num_batch = A.GetSize() / stride;
-    double *A_ptr = A.GetData();
-    double *Ainv_ptr = Ainv.GetData();
-    double *Adet_ptr = Adet.GetData();
+    float *A_ptr = A.GetData();
+    float *Ainv_ptr = Ainv.GetData();
+    float *Adet_ptr = Adet.GetData();
     if (mdim == 1)
     {
         for (int i = 0; i < num_batch; ++i)

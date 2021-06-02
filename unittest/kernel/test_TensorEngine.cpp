@@ -30,7 +30,7 @@ void test_suite_on_engine(TensorEngine &TE)
 {
    std::random_device rd;
    std::mt19937 twister(rd());
-   std::uniform_real_distribution<double> random(0.0, 1.0);
+   std::uniform_real_distribution<float> random(0.0, 1.0);
 
    SECTION(TE.GetExecType() + " Computations")
    {
@@ -97,7 +97,7 @@ void test_suite_on_engine(TensorEngine &TE)
          {
             for (int flatidx = 0; flatidx < T2_3_3.GetSize(); ++flatidx)
             {
-               T2_3_3[flatidx] = double(flatidx);
+               T2_3_3[flatidx] = float(flatidx);
             }
             TE("A_i_j=B_j_i", T2out_3_3, T2_3_3);
             T2out_3_3.MoveFromGPU();
@@ -122,7 +122,7 @@ void test_suite_on_engine(TensorEngine &TE)
             {
                for (int n = 0; n < 3; ++n)
                {
-                  double sum = 0.0;
+                  float sum = 0.0;
                   for (int j = 0; j < 3; ++j)
                   {
                      sum += T2_3_3(m,j)*T2_3_3(n,j);
@@ -165,13 +165,13 @@ void test_suite_on_engine(TensorEngine &TE)
 
          SECTION("Computation with externally defined cuda Data")
          {
-            double a_data[125];
+            float a_data[125];
             for (int i = 0; i < 125; ++i)
             {
-               a_data[i] = double(i);
+               a_data[i] = float(i);
             }
-            double *a_device_data;
-            acroCudaErrorCheck(cudaMalloc((void**)&a_device_data, 125*sizeof(double)));
+            float *a_device_data;
+            acroCudaErrorCheck(cudaMalloc((void**)&a_device_data, 125*sizeof(float)));
             Tensor A(125, a_data, a_device_data, false);
             Tensor B(125);
             TE("B_i=A_i", B, A);
@@ -193,7 +193,7 @@ void test_suite_on_engine(TensorEngine &TE)
 
          for (int flatidx = 0; flatidx < B.GetSize(); ++flatidx)
          {
-            B[flatidx] = double(flatidx);
+            B[flatidx] = float(flatidx);
          }
 
          TE("A_i_j=B_j_i", A, B);
@@ -239,17 +239,17 @@ void test_suite_on_engine(TensorEngine &TE)
 
             for (int flatidx = 0; flatidx < T.GetSize(); ++flatidx)
             {
-               T[flatidx] = double(flatidx);
+               T[flatidx] = float(flatidx);
             }
 
             for (int flatidx = 0; flatidx < W.GetSize(); ++flatidx)
             {
-               W[flatidx] = double(flatidx);
+               W[flatidx] = float(flatidx);
             }
 
             for (int flatidx = 0; flatidx < B.GetSize(); ++flatidx)
             {
-               B[flatidx] = double(flatidx);
+               B[flatidx] = float(flatidx);
             }
 
             TE("D_e_k1_k2 = W_k1_k2 T_e_k1_k2", D,W,T);
@@ -285,7 +285,7 @@ void test_suite_on_engine(TensorEngine &TE)
                      {
                         for (int j2 = 0; j2 < 4; ++j2)
                         {
-                           double Msum = 0.0;
+                           float Msum = 0.0;
                            for (int k1 = 0; k1 < 4; ++k1)
                            {
                               for (int k2 = 0; k2 < 4; ++k2)
@@ -319,13 +319,13 @@ void test_suite_on_engine(TensorEngine &TE)
             Tensor Z(2, 5, 4, 4);
             Tensor Y(5, 4, 4);
             for (int i = 0; i < B.GetSize(); ++ i)
-               B[i] = double(i);
+               B[i] = float(i);
             for (int i = 0; i < G.GetSize(); ++ i)
-               G[i] = double(i)/2.0;
+               G[i] = float(i)/2.0;
             for (int i = 0; i < X.GetSize(); ++ i)
-               X[i] = double(i);            
+               X[i] = float(i);            
             for (int i = 0; i < D.GetSize(); ++ i)
-               D[i] = double(i);  
+               D[i] = float(i);  
 
             SliceTensor U1(U, 0), U2(U, 1);
             SliceTensor Z1(Z, 0), Z2(Z, 1);
@@ -340,7 +340,7 @@ void test_suite_on_engine(TensorEngine &TE)
                {
                   for (int k2 = 0; k2 < 4; ++ k2)
                   {
-                     double U1sum = 0.0;
+                     float U1sum = 0.0;
                      for (int i1 = 0; i1 < 4; ++i1)
                         for (int i2 = 0; i2 < 4; ++i2)
                            U1sum += G(k1,i1)*B(k2,i2)*X(e,i1,i2);
@@ -359,7 +359,7 @@ void test_suite_on_engine(TensorEngine &TE)
                {
                   for (int k2 = 0; k2 < 4; ++ k2)
                   {
-                     double U2sum = 0.0;
+                     float U2sum = 0.0;
                      for (int i1 = 0; i1 < 4; ++i1)
                         for (int i2 = 0; i2 < 4; ++i2)
                            U2sum += B(k1,i1)*G(k2,i2)*X(e,i1,i2);
@@ -379,7 +379,7 @@ void test_suite_on_engine(TensorEngine &TE)
                   {
                      for (int k2 = 0; k2 < 4; ++ k2)
                      {
-                        double Zsum = 0.0;
+                        float Zsum = 0.0;
                         for (int n = 0; n < 2; ++n)
                            Zsum += D(e,m,n,k1,k2)*U(n,e,k1,k2);
 
@@ -402,7 +402,7 @@ void test_suite_on_engine(TensorEngine &TE)
                   {
                      for (int i2 = 0; i2 < 4; ++ i2)
                      {
-                        double Ysum = 0.0;
+                        float Ysum = 0.0;
                         for (int k1 = 0; k1 < 4; ++k1)
                            for (int k2 = 0; k2 < 4; ++k2)
                               Ysum += G(k1,i1)*B(k2,i2)*Z1(e,k1,k2);
@@ -423,7 +423,7 @@ void test_suite_on_engine(TensorEngine &TE)
                   {
                      for (int i2 = 0; i2 < 4; ++ i2)
                      {
-                        double Ysum = 0.0;
+                        float Ysum = 0.0;
                         for (int k1 = 0; k1 < 4; ++k1)
                            for (int k2 = 0; k2 < 4; ++k2)
                               Ysum += B(k1,i1)*G(k2,i2)*Z2(e,k1,k2);
@@ -445,14 +445,14 @@ void test_suite_on_engine(TensorEngine &TE)
 
             for (int flatidx = 0; flatidx < Btilde1.GetSize(); ++flatidx)
             {
-               Btilde1[flatidx] = double(flatidx % 11);
-               Btilde2[flatidx] = 2.0*double(flatidx % 7);
-               Btilde3[flatidx] = 3.0*double(flatidx % 13);
+               Btilde1[flatidx] = float(flatidx % 11);
+               Btilde2[flatidx] = 2.0*float(flatidx % 7);
+               Btilde3[flatidx] = 3.0*float(flatidx % 13);
             }
 
             for (int flatidx = 0; flatidx < D.GetSize(); ++flatidx)
             {         
-               D[flatidx] = 3.5*double(flatidx % 5);
+               D[flatidx] = 3.5*float(flatidx % 5);
             }
 
             TE(kernel_str, S, Btilde1, Btilde2, Btilde3, D);
@@ -473,7 +473,7 @@ void test_suite_on_engine(TensorEngine &TE)
             for (int j2 = 0; j2 < 5; ++j2)
             for (int j3 = 0; j3 < 5; ++j3)
             {
-               double Ssum = 0.0;
+               float Ssum = 0.0;
                for (int k1 = 0; k1 < 5; ++k1)
                for (int m = 0; m < 3; ++m)
                for (int n = 0; n < 3; ++n)                     
@@ -506,15 +506,15 @@ void test_suite_on_engine(TensorEngine &TE)
 
             for (int flatidx = 0; flatidx < D.GetSize(); ++flatidx)
             {
-               J[flatidx] = double(flatidx);
-               Jinv[flatidx] = double(flatidx)+1.0;
+               J[flatidx] = float(flatidx);
+               Jinv[flatidx] = float(flatidx)+1.0;
             }
 
             for (int flatidx = 0; flatidx < C.GetSize(); ++flatidx)
             {
-               C[flatidx] = double(flatidx)+2;
-               Jdet[flatidx] = double(flatidx)+3;
-               W[flatidx] = double(flatidx) / 10.0;
+               C[flatidx] = float(flatidx)+2;
+               Jdet[flatidx] = float(flatidx)+3;
+               W[flatidx] = float(flatidx) / 10.0;
             }
 
             TE("D_e_m_n_k1_k2 = W_e_k1_k2 C_e_k1_k2 Jdet_e_k1_k2 Jinv_e_k1_k2_m_j Jinv_e_k1_k2_n_j",
@@ -529,7 +529,7 @@ void test_suite_on_engine(TensorEngine &TE)
             for (int k1 = 0; k1 < 2; ++k1)
             for (int k2 = 0; k2 < 2; ++k2)
             {
-               double sum = 0.0;
+               float sum = 0.0;
                for (int j = 0; j < 2; ++j)
                {
                   sum += W(e,k1,k2)*C(e,k1,k2)*Jdet(e,k1,k2)*Jinv(e,k1,k2,m,j)*Jinv(e,k1,k2,n,j);
@@ -550,19 +550,19 @@ void test_suite_on_engine(TensorEngine &TE)
 
             for (int flatidx = 0; flatidx < D.GetSize(); ++flatidx)
             {
-               Jinv[flatidx] = double(flatidx)+1.0;
+               Jinv[flatidx] = float(flatidx)+1.0;
             }
 
             for (int flatidx = 0; flatidx < C.GetSize(); ++flatidx)
             {
-               C[flatidx] = double(flatidx)+2;
-               Jdet[flatidx] = double(flatidx)+3;
+               C[flatidx] = float(flatidx)+2;
+               Jdet[flatidx] = float(flatidx)+3;
                
             }
 
             for (int flatidx = 0; flatidx < W.GetSize(); ++flatidx)
             {
-               W[flatidx] = double(flatidx) / 10.0;
+               W[flatidx] = float(flatidx) / 10.0;
             }
 
             TE("D_e_m_n_k1_k2_k3 = W_k1_k2_k3 C_e_k1_k2_k3 Jdet_e_k1_k2_k3 Jinv_e_k1_k2_k3_n_j Jinv_e_k1_k2_k3_m_j",
@@ -578,7 +578,7 @@ void test_suite_on_engine(TensorEngine &TE)
             for (int k2 = 0; k2 < 2; ++k2)
             for (int k3 = 0; k3 < 2; ++k3)
             {
-               double sum = 0.0;
+               float sum = 0.0;
                for (int j = 0; j < 3; ++j)
                {
                   sum += W(k1,k2,k3)*C(e,k1,k2,k3)*Jdet(e,k1,k2,k3)*Jinv(e,k1,k2,k3,m,j)*Jinv(e,k1,k2,k3,n,j);
